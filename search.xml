@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Spring Security OAuth核心类解析]]></title>
+    <url>%2F2019%2F07%2F11%2FSpring-Security-OAuth%2F</url>
+    <content type="text"><![CDATA[前言 从工作到现在也经历过不少的项目了，在权限管理那块使用的一直都是Shiro安全框架。直到最近一段时间学习了微服务相关知识，接触到了Spring Security，才发现Security的强大功能。相对shiro而言，Spring Security显得并不是那么好用，甚至是有些复杂，想要弄懂并不是很容易。通过查找资料，理解Spring Security Oauth2的基本原理，知道Spring Security Oauth2是如何实现的，这对使用Security是很有帮助的，特在此记录一下。 先用一张图展示一下Spring Security Oauth2的运行流程上图蓝色的方块代表执行过程中调用的具体的类，绿色的方块代表整个执行流程中调用的类，绿色的括号中代表的是该接口调用的具体的实现类。整个流程的入口点是在TokenEndpoint，由它来处理获取令牌的请求，获取令牌的请求默认是/oauth/token这个路径。 流程解析 在请求到达/oauth/token之前经过了ClientCredentialsTokenEndpointFilter这个过滤器，使用clientId和clientSecret组装成一个UsernamePasswordAuthenticationToken作为身份标识，使用容器中的顶级身份管理器AuthenticationManager去进行身份认证。 （AuthenticationManager的实现类一般是ProviderManager。而ProviderManager内部维护了一个List,真正的身份认证是由一系列AuthenticationProvider去完成。而AuthenticationProvider的常用实现类则是DaoAuthenticationProvider，DaoAuthenticationProvider内部又聚合了一个UserDetailsService接口，UserDetailsService才是获取用户详细信息的最终接口） 当TokenEndpoint收到请求时，它首先会调用ClientDetailsService,ClientDetaisService从名字上看就很可以知道是一个类似于UserDetailsService的接口，只不过UserDetailsService读取的是用户的信息，而ClientDetailsService读取的是第三方应用的信息。 当请求头中带上Client的信息，而这个类就可以做到根据ClientId读取相应的配置信息。而ClientDetailsSevice读取到的信息都会封装到ClientDetails这个对象中。 同时，TokenEndpoint还会创建一个TokenRequests的对象，这个对象中封装了除了第三方应用以外的其他信息。比如说grant_type,scope,username,password(限密码模式)等等信息，而这些信息都是封装在TokenRequests里面的。同时ClientDetails也会被放到TokenRequests中，因为第三方应用的信息也是令牌请求的一部分。 之后利用TokenRequests去调用一个叫做TokenGranter的令牌授权者的接口，这个接口其实是对四种不同的授权模式进行的一个封装。在这个接口里，它会根据请求传递过来的grant_type去挑一个具体的实现来执行令牌生成的逻辑 不论采用哪种方式进行令牌的生成，在这个生成的过程中都会产生两个对象，一个是OAuth2Request,这个对象实际上是之前的ClientDetails和TokenRequests这两个对象的一个整合。另一个Authorization封装的实际上是当前授权用户的一些信息，也就是谁在进行授权行为，Authorization里封装的就是谁的信息。这里的用户信息是通过UserDetailsService进行读取的。 OAuth2Request和Authorization这两个对象组合起来，会形成一个OAuth2Authorization对象，而这个最终产生的对象它的里面就包含了当前是哪个第三方应用在请求哪个用户以哪种授权模式（包括授权过程中的一些其他参数）进行授权，也就是这个对象会汇总之前的几个对象的信息都会封装到OAuth2Authorization这个对象中。 然后这个对象会传递到一个叫做AuthorizationServerTokenServices的接口的实现类，它拿到OAuth2Authorization中所有的信息之后最终会生成一个OAuth2的令牌OAuth2AccessToken。 AuthorizationServerTokenServices的接口的默认实现DefaultTokenServices中包含着其他两个接口的引用，TokenStore是用来定制token存储策略的，实现类有InMemoryTokenStore、JdbcTokenStore、JwkTokenStore、RedisTokenStore。TokenEnhancer是token的增强器，用于自定义令牌信息。相关链接理解OAuth 2.0OAuth官网OAuth2-spring-security-guide]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+        <tag>Spring Security</tag>
+      </tags>
+  </entry>
+</search>
