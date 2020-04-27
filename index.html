@@ -140,6 +140,57 @@
     
     
       <div class="col-12 col-md-4 m-auto">
+        <a href="/2020/04/27/基于Harbor搭建Docker本地私服/" target="_self">
+          <img src="/img/harbor/harbor5.jpg" srcset="/img/loading.gif" alt="基于Harbor搭建Docker本地私服"
+               class="index-img img-fluid rounded index-thumbnails">
+        </a>
+      </div>
+    
+    <div class="col-12 col-md-8 mx-auto index-info">
+      <a href="/2020/04/27/基于Harbor搭建Docker本地私服/">
+        <p class="h4 index-header">基于Harbor搭建Docker本地私服</p>
+      </a>
+
+      <a href="/2020/04/27/基于Harbor搭建Docker本地私服/">
+        
+        
+          
+        
+        <div class="index-excerpt" >
+          <div class="index-text mb-1">安装Harbor安装Harbor的前提条件是，本地已经装好了Docker-Compose。
+我们可以从https://github.com/goharbor/harbor/releases找到Harbor的离线安装包。
+
+在我们下载好harbor-offline-installer-v1.10.2.tgz，并进行解压。
+tar -zxvf harbor-offline-installer-v1.10.2.tgz
+随后进入解压好的目录，
+
+# 修改 harbor.yml hostname配置，同时也可以修改默认端口及默认登陆密码信息。
+
+vim harbor.yml
+
+# 在配置文件修改完成后，</div>
+        </div>
+      </a>
+
+      <div class="index-btm">
+        
+          <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-27&nbsp;&nbsp;
+        
+        
+        
+          <i class="iconfont icon-tag"></i>
+          
+            <a href="/tags/Docker-Harbor/">Docker Harbor</a>&nbsp;
+          
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto">
         <a href="/2019/12/30/半小时Docker简单入门/" target="_self">
           <img src="/img/docker/docker.jpg" srcset="/img/loading.gif" alt="半小时Docker简单入门"
                class="index-img img-fluid rounded index-thumbnails">
@@ -242,6 +293,7 @@ yum install </div>
       <i class="iconfont icon-love"></i>
       <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"> <b>Fluid</b></a>
     </div>
+    <p id="hitokoto">:D 获取中...</p>
     
 
     
@@ -249,7 +301,15 @@ yum install </div>
     
   </div>
 </footer>
-
+<script>
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      const hitokoto = document.getElementById('hitokoto')
+      hitokoto.innerText = data.hitokoto
+      })
+      .catch(console.error)
+</script>
 <!-- SCRIPTS -->
 <script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
 <script  src="https://cdn.staticfile.org/popper.js/1.16.1/umd/popper.min.js" ></script>

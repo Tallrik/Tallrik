@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>基于Harbor搭建Docker本地私服</title>
+    <link href="/2020/04/27/%E5%9F%BA%E4%BA%8EHarbor%E6%90%AD%E5%BB%BADocker%E6%9C%AC%E5%9C%B0%E7%A7%81%E6%9C%8D/"/>
+    <url>/2020/04/27/%E5%9F%BA%E4%BA%8EHarbor%E6%90%AD%E5%BB%BADocker%E6%9C%AC%E5%9C%B0%E7%A7%81%E6%9C%8D/</url>
+    
+    <content type="html"><![CDATA[<h1 id="安装Harbor"><a href="#安装Harbor" class="headerlink" title="安装Harbor"></a>安装Harbor</h1><p>安装Harbor的前提条件是，本地已经装好了Docker-Compose。</p><p>我们可以从<a href="https://github.com/goharbor/harbor/releases" target="_blank" rel="noopener">https://github.com/goharbor/harbor/releases</a>找到Harbor的离线安装包。</p><p><img src="https://imgkr.cn-bj.ufileos.com/4e2075f3-5b83-491d-a585-2cf7f75e5b1c.png" srcset="/img/loading.gif" alt></p><p>在我们下载好<strong>harbor-offline-installer-v1.10.2.tgz</strong>，并进行解压。</p><pre><code class="shell">tar -zxvf harbor-offline-installer-v1.10.2.tgz</code></pre><p>随后进入解压好的目录，</p><p><img src="/.top//C:%5CUsers%5CJack%5CDesktop%5Caa7fe094-b33c-41d5-8731-67d620194b25.png" srcset="/img/loading.gif" alt></p><pre><code class="shell"># 修改 harbor.yml hostname配置，同时也可以修改默认端口及默认登陆密码信息。vim harbor.yml# 在配置文件修改完成后，执行安装程序sh install.sh</code></pre><pre><code class="shell"># Configuration file of Harbor# The IP address or hostname to access admin UI and registry service.# DO NOT use localhost or 127.0.0.1, because Harbor needs to be accessed by external clients.hostname: 192.168.1.130# http related confighttp:  # port for http, default is 80. If https enabled, this port will redirect to https port  port: 80# https related config# https:#   # https port for harbor, default is 443#   port: 443#   # The path of cert and key files for nginx#   certificate: /your/certificate/path#   private_key: /your/private/key/path# Uncomment external_url if you want to enable external proxy# And when it enabled the hostname will no longer used# external_url: https://reg.mydomain.com:8433# The initial password of Harbor admin# It only works in first time to install harbor# Remember Change the admin password from UI after launching Harbor.harbor_admin_password: Harbor12345</code></pre><p>待完全启动后，我们在浏览器打开192.168.1.130，不出意外就会出现Harbor的登陆页面，使用配置文件中的密码进行登陆即可。</p><h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><ul><li>停止服务： <code>docker-compose stop</code></li><li>开始服务： <code>docker-compose start</code></li></ul><h1 id="Docker配置私服"><a href="#Docker配置私服" class="headerlink" title="Docker配置私服"></a>Docker配置私服</h1><pre><code class="shell"># 修改 docker 接入私服vim /etc/docker/daemon.json&quot;insecure-registries&quot; : [&quot;192.168.1.130&quot;]# 重启docker systemctl restart docker</code></pre><h1 id="页面使用"><a href="#页面使用" class="headerlink" title="页面使用"></a>页面使用</h1><p>首先我们先看下登陆后的Harbor主页面</p><p><img src="https://imgkr.cn-bj.ufileos.com/a1bb0fd7-b165-4097-86f0-9b903e0d39dc.png" srcset="/img/loading.gif" alt></p><p>项目：就是我们需要使用到的私有化仓库地址。</p><p>我们可以点击项目名称，进入项目明细页面</p><p><img src="https://imgkr.cn-bj.ufileos.com/1b8fde60-79e3-42bf-bd66-3cb976b67f6e.png" srcset="/img/loading.gif" alt></p><p>里面有推送私有镜像的方法</p><p><img src="https://imgkr.cn-bj.ufileos.com/c6a068a8-146a-4c31-8c19-0622a5b8eb75.png" srcset="/img/loading.gif" alt></p><h1 id="制作镜像"><a href="#制作镜像" class="headerlink" title="制作镜像"></a>制作镜像</h1><pre><code class="shell">docker tag nginx:latest 192.168.1.130/library/nginx:0.0.1</code></pre><h1 id="上传"><a href="#上传" class="headerlink" title="上传"></a>上传</h1><h2 id="登陆私服"><a href="#登陆私服" class="headerlink" title="登陆私服"></a>登陆私服</h2><pre><code class="shell">docker login 192.168.1.130</code></pre><h2 id="上传镜像到私服"><a href="#上传镜像到私服" class="headerlink" title="上传镜像到私服"></a>上传镜像到私服</h2><pre><code class="shell">docker push 192.168.1.130/library/nginx:0.0.1</code></pre><p>打开网页，我们可以看到镜像仓库已经有我们刚才上传的镜像了</p><p><img src="https://imgkr.cn-bj.ufileos.com/b0869cc0-7c4c-42d8-a3fc-22ca096ef976.png" srcset="/img/loading.gif" alt></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Docker Harbor</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>半小时Docker简单入门</title>
     <link href="/2019/12/30/%E5%8D%8A%E5%B0%8F%E6%97%B6Docker%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8/"/>
     <url>/2019/12/30/%E5%8D%8A%E5%B0%8F%E6%97%B6Docker%E7%AE%80%E5%8D%95%E5%85%A5%E9%97%A8/</url>
