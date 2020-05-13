@@ -102,7 +102,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/harbor/harbor6.png') no-repeat center center;
+         style="background: url('/img/spring/1.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -161,6 +161,7 @@
             
             <div class="markdown-body">
               <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h2><p>本文基于Jackson而来，Jackson被Spring Boot 用作其默认JSON处理器，下面将展示如何在Spring Boot应用程序中格式化JSON日期字段。</p>
+<a id="more"></a>
 <h2 id="2-在日期字段上使用-JsonFormat"><a href="#2-在日期字段上使用-JsonFormat" class="headerlink" title="2.在日期字段上使用@JsonFormat"></a>2.在日期字段上使用<code>@JsonFormat</code></h2><h3 id="2-1-设定格式"><a href="#2-1-设定格式" class="headerlink" title="2.1 设定格式"></a>2.1 设定格式</h3><p><strong>我们可以使用  @JsonFormat注释来格式化特定字段：</strong></p>
 <pre><code class="java">public class Contact {    
     // other fields
@@ -173,7 +174,6 @@
 
     // standard getters and setters
 }</code></pre>
-<a id="more"></a>    
 <p>在birthday字段中，我们使用仅显示日期的模式，而在updateTime字段中还包含时间。</p>
 <p>这里使用了Java8的日期类型，如果我们需要使用<code>java.util.Date</code>之类的遗留类型 ，则可以通过相同的方式使用注释。</p>
 <p>最后，让我们看一下使用具有给定日期格式的<code>@JsonFormat</code> 呈现的输出：</p>
@@ -226,14 +226,6 @@ public class JacksonConfig {
             <hr>
             <div>
               <p>
-                
-                  <span>
-                <i class="iconfont icon-inbox"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/Spring-Boot/">Spring Boot</a>
-                      &nbsp;
-                    
-                  </span>&nbsp;&nbsp;
                 
                 
                   <span>
