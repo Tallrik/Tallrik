@@ -16,7 +16,7 @@
   <meta name="description" content="心存善念 天必佑之">
   <meta name="author" content="SunYee">
   <meta name="keywords" content="程序员 Java 笔记">
-  <title>半小时Docker简单入门 - SunYee</title>
+  <title>Spring Boot格式化JSON日期 - SunYee</title>
 
   <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
@@ -102,7 +102,7 @@
 </nav>
 
     <div class="view intro-2" id="background" parallax=true
-         style="background: url('/img/docker/docker_big.jpg') no-repeat center center;
+         style="background: url('/img/harbor/harbor6.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
@@ -115,7 +115,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期一, 十二月 30日 2019, 8:09 晚上
+                  星期六, 十一月 16日 2019, 7:42 晚上
                 </p>
               
 
@@ -124,7 +124,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    952 字
+                    822 字
                   </span>
                 
 
@@ -132,7 +132,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      4 分钟
+                      3 分钟
                   </span>
                 
 
@@ -160,120 +160,86 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h1 id="安装最新Docker"><a href="#安装最新Docker" class="headerlink" title="安装最新Docker"></a>安装最新Docker</h1><p>这里安装主要基于Linux环境下的安装，Windows环境可以直接使用Docker Desktop。</p>
-<ol>
-<li><p>安装 Docker 官方源</p>
-<pre><code class="shell">sudo yum-config-manager \
-     --add-repo \
-     https://download.docker.com/linux/centos/docker-ce.repo</code></pre>
-<p>如果这里提示<code>yum-config-manager：未找到命令</code>，我们需要先安装yum工具。</p>
-<pre><code class="shell">yum install -y yum-utils</code></pre>
-</li>
-<li><p>更新源</p>
-<pre><code class="shell">yum makecache fast</code></pre>
-</li>
-<li><p>安装docker-ce</p>
-<pre><code class="shell">yum install -y docker-ce</code></pre>
-</li>
-<li><p>设置开机执行</p>
-<pre><code class="shell">systemctl enable docker</code></pre>
-</li>
-<li><p>启动docker</p>
-<pre><code class="shell">systemctl start docker</code></pre>
-</li>
-<li><p>检查docker版本</p>
-<pre><code class="shell">docker version</code></pre>
-</li>
-</ol>
-<h1 id="镜像操作"><a href="#镜像操作" class="headerlink" title="镜像操作"></a>镜像操作</h1><h2 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h2><pre><code class="shell">docker pull name:tag</code></pre>
-<p>默认镜像的下载地址为<a href="https://hub.docker.com/" target="_blank" rel="noopener">https://hub.docker.com/</a></p>
-<p>由于镜像地址在国外，但是由于显而易见的网络原因，拉取镜像的过程非常耗时，严重影响使用 Docker 的体验。</p>
-<p>因此我们需要将Docker的镜像地址执行国内的第三方仓库，这样可以极大的提高国内网络访问Docker Hub的速度。</p>
-<pre><code class="shell">curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+              <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h2><p>本文基于Jackson而来，Jackson被Spring Boot 用作其默认JSON处理器，下面将展示如何在Spring Boot应用程序中格式化JSON日期字段。</p>
+<h2 id="2-在日期字段上使用-JsonFormat"><a href="#2-在日期字段上使用-JsonFormat" class="headerlink" title="2.在日期字段上使用@JsonFormat"></a>2.在日期字段上使用<code>@JsonFormat</code></h2><h3 id="2-1-设定格式"><a href="#2-1-设定格式" class="headerlink" title="2.1 设定格式"></a>2.1 设定格式</h3><p><strong>我们可以使用  @JsonFormat注释来格式化特定字段：</strong></p>
+<pre><code class="java">public class Contact {    
+    // other fields
 
-#该脚本可以将 --registry-mirror 加入到你的 Docker 配置文件 /etc/docker/daemon.json 中
-#同时，您也可以自己编辑vim /etc/docker/deamon.json文件，注意一定要符合json格式要求。
-# {
-#    &quot;registry-mirrors&quot;: [&quot;http://f1361db2.m.daocloud.io&quot;]
-# }</code></pre>
-<h2 id="查看本地已下载镜像"><a href="#查看本地已下载镜像" class="headerlink" title="查看本地已下载镜像"></a>查看本地已下载镜像</h2><pre><code class="shell">docker images</code></pre>
-<p><img src="https://imgkr.cn-bj.ufileos.com/80d3ec81-4a7b-4ca6-99c3-aa304de58bc2.png" srcset="/img/loading.gif" alt="images"></p>
-<ul>
-<li><strong>REPOSITORY：</strong>表示镜像的仓库源</li>
-<li><strong>TAG：</strong>镜像的标签</li>
-<li><strong>IMAGE ID：</strong>镜像ID</li>
-<li><strong>CREATED：</strong>镜像创建时间</li>
-<li><strong>SIZE：</strong>镜像大小</li>
-</ul>
-<h2 id="删除本地已下载镜像"><a href="#删除本地已下载镜像" class="headerlink" title="删除本地已下载镜像"></a>删除本地已下载镜像</h2><pre><code class="shell">docker rmi image_id</code></pre>
-<h1 id="端口操作"><a href="#端口操作" class="headerlink" title="端口操作"></a>端口操作</h1><pre><code class="shell">docker run --name name -d -p 8080:80 nginx:1.17</code></pre>
-<ul>
-<li>–name：为容器指定一个名称。</li>
-<li>-d：后台运行容器，并返回容器ID。</li>
-<li>-p：指定端口映射，格式为：<strong>主机(宿主)端口:容器端口</strong>。同时支持多端口映射， <strong>-p 80-90:80-90</strong>。</li>
-</ul>
-<h1 id="挂载操作"><a href="#挂载操作" class="headerlink" title="挂载操作"></a>挂载操作</h1><pre><code class="shell">docker run --name name -d -p 8080:80 -v /data:/usr/share/nginx/html nginx:1.17</code></pre>
-<ul>
-<li>-v：绑定一个卷，前面是宿主机的目录，后面是容器目录。</li>
-</ul>
-<h1 id="日志操作"><a href="#日志操作" class="headerlink" title="日志操作"></a>日志操作</h1><pre><code class="shell">docker logs -f 容器名称或容器ID</code></pre>
-<h1 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h1><pre><code class="shell">docker exec -it 容器名称 sh</code></pre>
-<ul>
-<li>-i：标准输入。</li>
-<li>-t：分配一个伪终端。</li>
-</ul>
-<h2 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h2><pre><code class="shell">docker rm -f 容器名称</code></pre>
-<ul>
-<li>-f：通过 SIGKILL 信号强制删除一个运行中的容器。</li>
-<li>如果不加 <strong>-f</strong> 则无法删除一个正在运行的容器，需要首先<code>docker stop 容器名称</code>。</li>
-</ul>
-<h1 id="网络操作"><a href="#网络操作" class="headerlink" title="网络操作"></a>网络操作</h1><pre><code class="shell">docker inspect 容器名称</code></pre>
-<h1 id="通过Dockerfile文件构建镜像"><a href="#通过Dockerfile文件构建镜像" class="headerlink" title="通过Dockerfile文件构建镜像"></a>通过Dockerfile文件构建镜像</h1><pre><code class="shell">docker built . -t name:tag</code></pre>
-<p>使用当前目录的Dockerfile创建镜像。</p>
-<ul>
-<li>-t：指定构建镜像的名字和标签。</li>
-<li>-f：指定要使用的Dockerfile的完整路径。</li>
-<li>-m：设置内存最大值。</li>
-</ul>
-<h1 id="Dockerfile示例"><a href="#Dockerfile示例" class="headerlink" title="Dockerfile示例"></a>Dockerfile示例</h1><pre><code class="shell">FROM centos #制作base image 基础镜像，尽量使用官方的image作为base image
+    @JsonFormat(pattern=&quot;yyyy-MM-dd&quot;)    
+    private LocalDate birthday;
 
-LABEL version=&quot;1.0&quot; #容器元信息，帮助信息，Metadata，类似于代码注释
-LABEL maintainer=&quot;author&quot; #容器作者信息
+    @JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)    
+    private LocalDateTime updateTime;
 
-#对于复杂的RUN命令，避免无用的分层，多条命令用反斜线换行，合成一条命令！
-RUN yum update &amp;&amp; yum install -y vim \
-    Python-dev #反斜线换行
-
-WORKDIR /root #相当于linux的cd命令，改变目录，尽量使用绝对路径！！！不要用RUN cd
-WORKDIR /test # 如果没有就自动创建
-
-ADD test.tar.gz /  # 添加到根目录并解压
-COPY hello test/  # 等同于上述ADD效果
-
-
-ADD与COPY
-   - 优先使用COPY命令
-    -ADD除了COPY功能还有解压功能
-
-ENV # 环境变量，尽可能使用ENV增加可维护性
-ENV MYSQL_VERSION 5.6 # 设置一个mysql常量</code></pre>
-<h1 id="安装Docker-Compose"><a href="#安装Docker-Compose" class="headerlink" title="安装Docker-Compose"></a>安装Docker-Compose</h1><pre><code class="shell">sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-docker-compose --version
-
-#这里使用的是1.25.4版本，如果需要其他的版本，打开`https://github.com/docker/compose/releases`找到需要的版本号进行替换即可</code></pre>
-
+    // standard getters and setters
+}</code></pre>
+<a id="more"></a>    
+<p>在birthday字段中，我们使用仅显示日期的模式，而在updateTime字段中还包含时间。</p>
+<p>这里使用了Java8的日期类型，如果我们需要使用<code>java.util.Date</code>之类的遗留类型 ，则可以通过相同的方式使用注释。</p>
+<p>最后，让我们看一下使用具有给定日期格式的<code>@JsonFormat</code> 呈现的输出：</p>
+<pre><code class="json">{
+    &quot;birthday&quot;: &quot;2019-08-29&quot;,
+    &quot;updateTime&quot;: &quot;2019-08-29 16:58:12&quot;
+}</code></pre>
+<p><strong>如我们所见，使用@JsonFormat 批注是格式化特定日期字段的绝佳方法。</strong></p>
+<p><strong>但是，仅在需要字段的特定格式时才应使用它。</strong>如果我们希望对应用程序中的所有日期都采用通用格式，那么有更好的方法来实现这一点，我们将在后面介绍。</p>
+<h3 id="2-2-设定时区"><a href="#2-2-设定时区" class="headerlink" title="2.2 设定时区"></a>2.2 设定时区</h3><p>另外，如果需要使用特定的时区，则可以设置<code>@JsonFormat</code>的<code>timezone</code>属性：</p>
+<pre><code class="java">@JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;, timezone=&quot;Asia/Shanghai&quot;)
+private LocalDateTime updateTime;</code></pre>
+<p>如果类型已经包含时区，例如在<code>java.time.ZonedDatetime</code>中，则我们不需要使用它 。</p>
+<h2 id="3-配置默认格式"><a href="#3-配置默认格式" class="headerlink" title="3.配置默认格式"></a>3.配置默认格式</h2><p>如果我们不想在每个字段上都添加上注解的话，我们也可以使用配置文件来为应用程序中的日期配置默认格式，并且这种方式更灵活，我们只需要在<code>applicaiton.yml</code>加入如下配置：</p>
+<pre><code class="yml">spring:  
+  jackson:    
+    date-format: yyyy-MM-dd HH:mm:ss</code></pre>
+<p>而且，如果我们想在JSON日期中使用特定的时区，则还有一个属性：</p>
+<pre><code class="yml">spring:  
+  jackson:  
+    time-zone: Asia/Shanghai</code></pre>
+<p>尽管像这样设置默认格式非常方便和直接，但是这种方法还是有一个缺点。它不支持Java8的日期类型，例如<code>LocalDate</code>和<code>LocalDateTime</code>，它只能用来格式化<code>Date</code>或<code>Calendar</code>类型的字段。</p>
+<h2 id="4-自定义Jackson的ObjectMapper"><a href="#4-自定义Jackson的ObjectMapper" class="headerlink" title="4.自定义Jackson的ObjectMapper"></a>4.自定义Jackson的ObjectMapper</h2><p>因此，如果我们想使用Java 8日期类型，并设置默认的日期格式，那么我们需要研究创建<code>Jackson2ObjectMapperBuilderCustomizer</code>：</p>
+<pre><code class="java">@Configuration
+@ConditionalOnClass(ObjectMapper.class)
+@AutoConfigureBefore(JacksonAutoConfiguration.class)
+public class JacksonConfig {    
+    private static final String NORM_DATE_PATTERN = &quot;yyyy-MM-dd&quot;;    
+    private static final String NORM_TIME_PATTERN = &quot;HH:mm:ss&quot;;    
+    private static final String NORM_DATETIME_FORMAT = &quot;yyyy-MM-dd HH:mm:ss&quot;;    
+    @Bean    
+    public Jackson2ObjectMapperBuilderCustomizer customizer() {        
+        return builder -&gt; {            
+            builder.simpleDateFormat(NORM_DATETIME_FORMAT);            
+            //属性值为null的不参与序列化
+            builder.serializationInclusion(JsonInclude.Include.NON_NULL); 
+            builder.serializers(new LocalTimeSerializer(DateTimeFormatter.ofPattern(NORM_TIME_PATTERN))); 
+            builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(NORM_DATE_PATTERN))); 
+            builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(NORM_DATETIME_FORMAT)));        
+        };    
+    }
+}</code></pre>
+<p>上面的示例显示了如何在我们的应用程序中配置默认格式。我们必须定义一个bean并覆盖它的customize方法来设置所需的格式，重要的是它可以同时支持Java8和旧式日期类型。</p>
+<h2 id="5-其他注意事项"><a href="#5-其他注意事项" class="headerlink" title="5.其他注意事项"></a>5.其他注意事项</h2><h3 id="5-1-无法找到com-fasterxml-jackson-datatype-jsr310-ser-LocalDateSerializer"><a href="#5-1-无法找到com-fasterxml-jackson-datatype-jsr310-ser-LocalDateSerializer" class="headerlink" title="5.1 无法找到com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer"></a>5.1 无法找到<code>com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer</code></h3><p>需要我们在<strong>Pom</strong>添加额外的依赖</p>
+<pre><code>&lt;dependency&gt;    
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    
+  &lt;artifactId&gt;spring-boot-starter-json&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
             </div>
             <hr>
             <div>
               <p>
                 
+                  <span>
+                <i class="iconfont icon-inbox"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Spring-Boot/">Spring Boot</a>
+                      &nbsp;
+                    
+                  </span>&nbsp;&nbsp;
+                
                 
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Docker/">Docker</a>
+                      <a class="hover-with-bg" href="/tags/Spring-Boot/">Spring Boot</a>
                     
                   </span>
                 
@@ -286,21 +252,15 @@ docker-compose --version
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/04/27/基于Harbor搭建Docker本地私服/">
+                      <a href="/2019/12/30/半小时Docker简单入门/">
                         <i class="fa fa-chevron-left"></i>
-                        <span class="hidden-mobile">基于Harbor搭建Docker本地私服</span>
+                        <span class="hidden-mobile">半小时Docker简单入门</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </div>
                   <div class="post-next col-6">
                     
-                    
-                      <a href="/2019/11/16/Boot格式化JSON日期/">
-                        <span class="hidden-mobile">Spring Boot格式化JSON日期</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="fa fa-chevron-right"></i>
-                      </a>
                     
                   </div>
                 </div>
@@ -485,7 +445,7 @@ docker-compose --version
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "半小时Docker简单入门&nbsp;",
+        "Spring Boot格式化JSON日期&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
